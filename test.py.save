@@ -1,0 +1,17 @@
+import csv
+import datetime
+from pymongo import MongoClient
+
+
+csvfile = open('../microblogDataset_COMP6235_CW2.csv','r')
+reader = csv.DictReader( csvfile )
+
+
+client = MongoClient()
+db = client['assignment-test']
+
+header = ["id","id_member","timestamp","text","geo_lat","geo_lng"]
+
+for res in db.microblog.find({ "timestamp" : { "$gte": datetime.datetime(2014, 6, 25, 9, 0), "$lte": datetime.datetime(2014, 6, 25, 9, 2)}}):
+	print res
+
