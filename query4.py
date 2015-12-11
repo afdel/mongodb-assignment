@@ -3,7 +3,7 @@ import datetime
 from pymongo import MongoClient
 import pymongo
 
-client = MongoClient()
+client = MongoClient('mongodb://localhost:27017/')
 db = client['assig-test']
 
 #header = ["id","id_member","timestamp","text","geo_lat","geo_lng"]
