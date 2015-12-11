@@ -19,12 +19,16 @@ db = client['assignment-test']
 #1
 
 users_count = 0
+real_users_count = 0
 unique_users = db.microblog.find().distinct("id_member")
 
 for user in unique_users :
 	users_count += 1
+	if user > 0:
+		real_users_count += 1
 
 print " Users Count : ",users_count
+print " Real Users Count : ",real_users_count
 
 # 2
 
@@ -77,10 +81,10 @@ reduce5 = Code("function (key, values) {"
                "  return total/count;"
                "}")
 
-averageLength = db.microblog.map_reduce(map5, reduce5, "myresults")
+#averageLength = db.microblog.map_reduce(map5, reduce5, "myresults")
 
-for average in averageLength.find():
-	print " Mean of messages length",average.get("value")
+#for average in averageLength.find():
+#	print " Mean of messages length",average.get("value")
 
 
 # 6
@@ -95,6 +99,16 @@ map6_1 = Code("function () {"
 	"	}						"
 )
 
+map6_1_2 = Code("function () {"
+        "       var text = String(this.text);                   "
+        "       var parts = text.split(/[\s\t.,?!;:]/);"
+        "       for( var i = 0; i<parts.length; i++) {		"
+	"		var unigram = parts[i];			"
+	"		emit(unigram, 1);			"
+	"	}						"
+        "       }                                               "
+)
+
 reduce6 = Code("function (key, values) {"
                "  var total = 0;"
                "  for (var i = 0; i < values.length; i++) {"
@@ -105,7 +119,7 @@ reduce6 = Code("function (key, values) {"
 
 
 
-countUnigram = db.microblog.map_reduce(map6_1, reduce6, "myresults6_1")
+countUnigram = db.microblog.map_reduce(map6_1_2, reduce6, "myresults6_1")
 
 for unigram in countUnigram.find().sort('value', pymongo.DESCENDING).limit(10):
         print "Unigram : ",unigram.get("_id")
