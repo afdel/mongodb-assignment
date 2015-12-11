@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import pymongo
 
-client = MongoClient()
+client = MongoClient('mongodb://localhost:27017/')
 db = client['assig-test']
 
 #1

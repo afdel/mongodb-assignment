@@ -4,22 +4,17 @@ import pymongo
 from bson.code import Code
 
 
-client = MongoClient()
+client = MongoClient('mongodb://localhost:27017/')
 db = client['assig-test']
 
 
 # 5
-
-#pipe = [{'$group': {'_id': None, 'avgLength': {'$avg': '$text.length'}, 'count': { '$sum': 1 } }}]
-#for average in db.microblog.aggregate(pipeline=pipe):
-#	print average
 
 
 map5 = Code("function () {"
 	"			emit('length', this.text.length );	"
 	"	}						"
 )
-
 
 
 reduce5 = Code("function (key, values) {"
